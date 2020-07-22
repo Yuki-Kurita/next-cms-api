@@ -1,0 +1,25 @@
+{
+  "name": "next-cms-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yuki-Kurita/next-cms-api.git"
+  },
+  "author": "Yuki-Kurita",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Yuki-Kurita/next-cms-api/issues"
+  },
+  "homepage": "https://github.com/Yuki-Kurita/next-cms-api#readme",
+  "dependencies": {
+    "body-parse": "^0.1.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.5.9",
+    "mongoose": "^5.9.25"
+  }
+}
