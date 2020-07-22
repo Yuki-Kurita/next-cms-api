@@ -14,14 +14,25 @@ module.exports = {
       })
   },
   getById: (req, res, next) => {
-    const id = req.params.id;
-    Article.findById(id)
+    Article.findById(req.params.id)
       .then(article => {
         res.locals.article = article;
         next();
       })
       .catch(err => {
         err.name === "CastError" ? next() : next(err);
+      })
+  },
+  getByTagId: (req, res, next) => {
+    const tagName = req.params.tagName;
+    Article.find({tagId: tagName})
+      .then(artcle => {
+        res.locals.artcle = artcle;
+        next();
+      })
+      .catch(err => {
+        console.log(err);
+        next(err);
       })
   },
   respondJSON: (req, res) => {

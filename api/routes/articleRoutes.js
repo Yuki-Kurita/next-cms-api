@@ -1,6 +1,8 @@
 const router = require("express").Router(),
   articleController = require("../controllers/articleController.js")
 
+router.get("/tag/:tagName", articleController.getByTagId,
+  articleController.respondJSON, articleController.errorJSON);
 router.get("/:id", articleController.getById,
   articleController.respondJSON, articleController.errorJSON);
 router.get("/", articleController.getAll,
