@@ -13,6 +13,17 @@ module.exports = {
         next(error);
       })
   },
+  getById: (req, res, next) => {
+    const id = req.params.id;
+    Article.findById(id)
+      .then(article => {
+        res.locals.article = article;
+        next();
+      })
+      .catch(err => {
+        err.name === "CastError" ? next() : next(err);
+      })
+  },
   respondJSON: (req, res) => {
     res.json({
       status: httpStatus.OK,
