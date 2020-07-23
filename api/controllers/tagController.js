@@ -1,5 +1,10 @@
 const Tag = require("../models/tag"),
-  httpStatus = require("http-status-codes");
+  httpStatus = require("http-status-codes"),
+  getTagParams = body => {
+    return {
+      tagName: body.tagName
+    };
+  };
 
 module.exports = {
   // Tag名からTag情報を取得
@@ -26,8 +31,35 @@ module.exports = {
         next(err);
       })
   },
+  create: (req, res, next) => {
+    // 投稿されたタグが存在しなければ追加
+    Tag.find({tagName: req.body.tagName})
+      .then(tag => {
+        if (tag.length !== 0) {
+          res.json({
+            status: httpStatus.OK,
+            message: `Already exist tag: ${tag}`
+          });
+        } else {
+          const tagParams = getTagParams(req.body);
+          Tag.create(tagParams)
+            .then(tag => {
+              res.status(201).json({
+                status: httpStatus.CREATED,
+                message: `Created : ${tag}`
+              });
+            })
+            .catch(err => {
+              next(err);
+            })
+        }
+      })
+      .catch(err => {
+        next(err);
+      })
+  },
   respondJSON: (req, res) => {
-    // 記事がnullなら204を返す
+    // tagがnullなら204を返す
     if (!res.locals.tag || res.locals.tag.length == 0) {
       res.status(204).json({
         status: httpStatus.NO_CONTENT,
@@ -47,6 +79,13 @@ module.exports = {
     }) : res.status(202).json({
       status: httpStatus.ACCEPTED,
       message: "Unknown error"
+    });
+  },
+  errorPostJSON: (err, req, res, next) => {
+    console.log(err);
+    res.status(400).json({
+      status: httpStatus.BAD_REQUEST,
+      message: `Error saving tag: ${err.message}`
     });
   }
 }

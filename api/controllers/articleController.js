@@ -56,7 +56,6 @@ module.exports = {
         });
       })
       .catch(err => {
-        console.log(`Error saving article: ${err.message}`);
         next(err);
       })
   },
