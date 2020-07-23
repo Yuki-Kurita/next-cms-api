@@ -2,7 +2,7 @@ const express = require("express"),
   app = express(),
   router = require("./api/routes/index"),
   mongoose = require("mongoose"),
-  dbURL = "mongodb://localhost:27017/cms_db";
+  dbURL = process.env.MONGODB_URI || "mongodb://localhost:27017/cms_db";
 
 mongoose.connect(
   dbURL,
