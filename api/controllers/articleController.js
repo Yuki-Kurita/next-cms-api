@@ -50,8 +50,10 @@ module.exports = {
     const articleParams = getArticleParams(req.body);
     Article.create(articleParams)
       .then(article => {
-        res.locals.article = article;
-        next();
+        res.json({
+          status: httpStatus.CREATED,
+          message: `Created : ${article}`
+        });
       })
       .catch(err => {
         console.log(`Error saving article: ${err.message}`);
@@ -65,14 +67,18 @@ module.exports = {
     });
   },
   errorJSON: (err, req, res, next) => {
-    let errorObject;
-    err ? errorObject = {
+    err ? res.status(500).json({
       status: httpStatus.INTERNAL_SERVER_ERROR,
       message: err.message
-    } : errorObject = {
+    }) : res.status(202).json({
       status: httpStatus.ACCEPTED,
       message: "Unknown error"
-    }
-    res.json(this.errorJSON);
+    });
+  },
+  errorPostJSON: (err, req, res, next) => {
+    res.status(400).json({
+      status: httpStatus.BAD_REQUEST,
+      message: `Error saving article: ${err.message}`
+    });
   }
 }
