@@ -1,11 +1,18 @@
 const Article = require("../models/article"),
-  httpStatus = require("http-status-codes")
+  httpStatus = require("http-status-codes"),
+  getArticleParams = body => {
+    return {
+      title: body.title,
+      content: body.content,
+      tagId: body.tagId
+    };
+  };
 
 module.exports = {
   getAll: (req, res, next) => {
     Article.find()
-      .then(articles => {
-        res.locals.articles = articles;
+      .then(article => {
+        res.locals.article = article;
         next();
       })
       .catch(err => {
@@ -28,8 +35,8 @@ module.exports = {
     // Tag情報からタグIDを取得
     const tagId = res.locals.tag._id;
     Article.find({tagId: tagId})
-      .then(artcle => {
-        res.locals.artcle = artcle;
+      .then(article => {
+        res.locals.article = article;
         next();
       })
       .catch(err => {
@@ -37,10 +44,24 @@ module.exports = {
         next(err);
       })
   },
+  create: (req, res, next) => {
+    // request bodyのtag nameをidに変換
+    req.body.tagId = res.locals.tag._id;
+    const articleParams = getArticleParams(req.body);
+    Article.create(articleParams)
+      .then(article => {
+        res.locals.article = article;
+        next();
+      })
+      .catch(err => {
+        console.log(`Error saving article: ${err.message}`);
+        next(err);
+      })
+  },
   respondJSON: (req, res) => {
     res.json({
       status: httpStatus.OK,
-      data: res.locals.artcle
+      data: res.locals.article
     });
   },
   errorJSON: (err, req, res, next) => {

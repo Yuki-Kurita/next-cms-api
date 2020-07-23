@@ -6,6 +6,7 @@ router.get("/tags/:tagName", tagController.getByName, articleController.getByTag
   articleController.respondJSON, articleController.errorJSON);
 router.get("/:id", articleController.getById,
   articleController.respondJSON, articleController.errorJSON);
+router.post("/", tagController.getByName, articleController.create);
 router.get("/", articleController.getAll,
   articleController.respondJSON, articleController.errorJSON);
 
