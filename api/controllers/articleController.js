@@ -60,6 +60,27 @@ module.exports = {
         next(err);
       })
   },
+  update: (req, res, next) => {
+    const articleId = req.params.id;
+    req.body.tagId = res.locals.tag._id;
+    const articleParams = getArticleParams(req.body);
+
+    Article.findByIdAndUpdate(articleId, {
+      $set: articleParams
+    }, {
+      runValidators: true
+    })
+    .then(article => {
+      res.json({
+        status: httpStatus.CREATED,
+        message: `Before : ${article} => After : ${articleParams}`
+      });
+    })
+    .catch(err => {
+      console.log(`Error updating article by ID: ${err.message}`);
+      next(err);
+    })
+  },
   respondJSON: (req, res) => {
     res.json({
       status: httpStatus.OK,
