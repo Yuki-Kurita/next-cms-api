@@ -8,8 +8,9 @@ module.exports = {
     const tagName = req.params.tagName ?? req.body.tagName;
     Tag.findOne({tagName: tagName})
       .then(tag => {
+        // 該当のタグがなければnullが入る -> nullならcasthandle
         res.locals.tag = tag;
-        next();
+        tag ? next() : next(err = {name: "CastError"});
       })
       .catch(err => {
         next(err);

@@ -11,36 +11,36 @@ const Article = require("../models/article"),
 module.exports = {
   getAll: (req, res, next) => {
     Article.find()
+      .where("deleteFlag", false)
       .then(article => {
         res.locals.article = article;
         next();
       })
       .catch(err => {
-        console.log(`Error fetching all articles: ${err.message}`);
-        next(error);
+        next(err);
       })
   },
   getById: (req, res, next) => {
     Article.findById(req.params.id)
+      .where("deleteFlag", false)
       .then(article => {
         res.locals.article = article;
         next();
       })
       .catch(err => {
-        // データがない場合はPass
-        err.name === "CastError" ? next() : next(err);
+        next(err);
       })
   },
   getByTagId: (req, res, next) => {
     // Tag情報からタグIDを取得
     const tagId = res.locals.tag._id;
     Article.find({tagId: tagId})
+      .where("deleteFlag", false)
       .then(article => {
         res.locals.article = article;
         next();
       })
       .catch(err => {
-        console.log(err);
         next(err);
       })
   },
@@ -98,10 +98,18 @@ module.exports = {
     })
   },
   respondJSON: (req, res) => {
-    res.json({
-      status: httpStatus.OK,
-      data: res.locals.article
-    });
+    // 記事がnullなら204を返す
+    if (!res.locals.article || res.locals.article.length == 0) {
+      res.status(204).json({
+        status: httpStatus.NO_CONTENT,
+        data: res.locals.article
+      })
+    } else {
+      res.json({
+        status: httpStatus.OK,
+        data: res.locals.article
+      });
+    }
   },
   errorJSON: (err, req, res, next) => {
     err ? res.status(500).json({
@@ -117,5 +125,14 @@ module.exports = {
       status: httpStatus.BAD_REQUEST,
       message: `Error saving article: ${err.message}`
     });
+  },
+  castErrorHandle: (err, req, res, next) => {
+    // データがない場合はPass
+    if (err.name === "CastError") {
+      res.locals.article = null;
+      next();
+    } else {
+      next(err);
+    }
   }
 }
