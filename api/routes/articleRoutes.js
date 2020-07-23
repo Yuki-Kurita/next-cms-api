@@ -6,6 +6,8 @@ router.get("/tags/:tagName", tagController.getByName, articleController.getByTag
   articleController.respondJSON, articleController.errorJSON);
 router.put("/:id", tagController.getByName, articleController.update,
   articleController.errorPostJSON);
+router.delete("/:id", tagController.getByName, articleController.delete,
+  articleController.errorPostJSON);
 router.get("/:id", articleController.getById,
   articleController.respondJSON, articleController.errorJSON);
 router.post("/", tagController.getByName, articleController.create,
