@@ -20,12 +20,14 @@ module.exports = {
         next();
       })
       .catch(err => {
+        // データがない場合はPass
         err.name === "CastError" ? next() : next(err);
       })
   },
   getByTagId: (req, res, next) => {
-    const tagName = req.params.tagName;
-    Article.find({tagId: tagName})
+    // Tag情報からタグIDを取得
+    const tagId = res.locals.tag._id;
+    Article.find({tagId: tagId})
       .then(artcle => {
         res.locals.artcle = artcle;
         next();
@@ -38,7 +40,7 @@ module.exports = {
   respondJSON: (req, res) => {
     res.json({
       status: httpStatus.OK,
-      data: res.locals
+      data: res.locals.artcle
     });
   },
   errorJSON: (err, req, res, next) => {

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose"),
   dbURL = "mongodb://localhost:27017/cms_db",
-  Article = require("../api/models/article");
+  Article = require("../api/models/tag");
 
 mongoose.connect(
 dbURL,
@@ -8,13 +8,11 @@ dbURL,
 );
 mongoose.set("useCreateIndex", true);
 
-const sampleArticle1 = new Article({
-  title: "Python",
-  content: "Machine learningとかで流行った",
-  tagId: "ab123",
+const sampleTag1 = new Article({
+  tagName: "Python"
 });
 
-sampleArticle1.save()
+sampleTag1.save()
   .then((savedDocument) => {
     console.log("Saved this document");
     console.log(savedDocument);

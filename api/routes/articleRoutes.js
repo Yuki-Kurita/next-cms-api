@@ -1,7 +1,8 @@
 const router = require("express").Router(),
-  articleController = require("../controllers/articleController.js")
+  articleController = require("../controllers/articleController"),
+  tagController = require("../controllers/tagController");
 
-router.get("/tag/:tagName", articleController.getByTagId,
+router.get("/tags/:tagName", tagController.getByName, articleController.getByTagId,
   articleController.respondJSON, articleController.errorJSON);
 router.get("/:id", articleController.getById,
   articleController.respondJSON, articleController.errorJSON);
