@@ -19,7 +19,7 @@ app.use(
 );
 app.use(express.json());
 
-app.use("/", router);
+app.use("/api/v1/", router);
 
 app.listen(app.get("port"), () => {
   console.log(`Server running at http:///localhost::${app.get("port")}`);
