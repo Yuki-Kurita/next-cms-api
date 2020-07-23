@@ -15,7 +15,7 @@ const articleSchema = new Schema(
       minlength: [1, "Input content"]
     },
     tagId: {
-      type: Number,
+      type: String,
       required: [true, "Need tags"]
     },
     updatedAt: {
@@ -27,6 +27,6 @@ const articleSchema = new Schema(
       default: false
     }
   }
-)
+);
 
 module.exports = mongoose.model("Article", articleSchema);
