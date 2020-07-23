@@ -50,7 +50,7 @@ module.exports = {
     const articleParams = getArticleParams(req.body);
     Article.create(articleParams)
       .then(article => {
-        res.json({
+        res.status(201).json({
           status: httpStatus.CREATED,
           message: `Created : ${article}`
         });
@@ -71,13 +71,29 @@ module.exports = {
       runValidators: true
     })
     .then(article => {
-      res.json({
+      res.status(201).json({
         status: httpStatus.CREATED,
         message: `Before : ${article} => After : ${articleParams}`
       });
     })
     .catch(err => {
       console.log(`Error updating article by ID: ${err.message}`);
+      next(err);
+    })
+  },
+  delete: (req, res, next) => {
+    const articleId = req.params.id;
+    Article.findByIdAndUpdate(articleId, {
+      deleteFlag: true
+    })
+    .then(article => {
+      res.json({
+        status: httpStatus.OK,
+        message: `Delete artiecle by ID: ${article}`
+      });
+    })
+    .catch(err => {
+      console.log(`Error deleting article by ID: ${err.message}`);
       next(err);
     })
   },
