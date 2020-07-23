@@ -12,7 +12,11 @@ const sampleTag1 = new Article({
   tagName: "Python"
 });
 
-sampleTag1.save()
+const sampleTag2 = new Article({
+  tagName: "Node.js"
+});
+
+sampleTag2.save()
   .then((savedDocument) => {
     console.log("Saved this document");
     console.log(savedDocument);
